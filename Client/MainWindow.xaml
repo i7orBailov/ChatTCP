@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="UnderTelegram" Icon="Recources/chat.ico" Height="450" Width="800" Closing="Window_Closing">
+        Title="UnderChat" Icon="Recources/chat.ico" Height="450" Width="800" Closing="Window_Closing">
     <Grid ShowGridLines="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"></RowDefinition>
