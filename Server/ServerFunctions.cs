@@ -44,7 +44,7 @@ namespace Server
         
         protected internal void NotifyAllUsers(string messageToSend, int senderUserID, bool includeSender = false)
         {
-            byte[] writeBuffer = Encoding.UTF8.GetBytes(messageToSend);
+            byte[] writeBuffer = Encoding.Unicode.GetBytes(messageToSend);
 
             for (int i = 0; i < users.Count; i++)
             {

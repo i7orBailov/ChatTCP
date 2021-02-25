@@ -37,7 +37,7 @@ namespace Server
             do
             {
                 numberOfBytesRead = dataTransferStream.Read(readBuffer, 0, readBuffer.Length);
-                completeMessage.Append(Encoding.UTF8.GetString(readBuffer, 0, numberOfBytesRead));
+                completeMessage.Append(Encoding.Unicode.GetString(readBuffer, 0, numberOfBytesRead));
             } while (dataTransferStream.DataAvailable);
 
             return completeMessage.ToString();
