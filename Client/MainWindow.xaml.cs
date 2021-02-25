@@ -99,7 +99,7 @@ namespace Client
             try
             {
                 string messageToSend = inputMessage;
-                byte[] writeBuffer = Encoding.UTF8.GetBytes(messageToSend);
+                byte[] writeBuffer = Encoding.Unicode.GetBytes(messageToSend);
                 dataTransferStream.Write(writeBuffer, 0, writeBuffer.Length);
             }
             catch (Exception) { ShowError("Connect to the server firstly", MessageBoxButton.OK); }
@@ -115,7 +115,7 @@ namespace Client
                 do
                 {
                     numberOfBytesRead = dataTransferStream.Read(readBuffer, 0, readBuffer.Length);
-                    completeMessage.Append(Encoding.UTF8.GetString(readBuffer, 0, numberOfBytesRead));
+                    completeMessage.Append(Encoding.Unicode.GetString(readBuffer, 0, numberOfBytesRead));
                 } while (dataTransferStream.DataAvailable);
 
                 Dispatcher.Invoke(() =>
