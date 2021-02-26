@@ -13,13 +13,11 @@ namespace Client
     {
         static TcpClient client = new TcpClient();
         static NetworkStream dataTransferStream;
-        bool isConnected = false;
+        bool isConnectedToServer = false;
+        bool WindowActivatedFirstTime = true;
 
-        public MainWindow()
-        {
+        public MainWindow() =>
             InitializeComponent();
-            GetDefaultSettings();
-        }
 
         void GetDefaultSettings(bool messageField = true, bool nickName = true)
         {
@@ -41,14 +39,14 @@ namespace Client
 
         void ConnectDisconnect_Click(object sender, RoutedEventArgs e)
         {
-            if (!isConnected)
+            if (!isConnectedToServer)
             {
                 if (!string.IsNullOrWhiteSpace(userNickName.Text) && userNickName.Foreground != Brushes.Gray)
                 {
                     ConnectToServer();
                     if (client.Connected)
                     {
-                        isConnected = true;
+                        isConnectedToServer = true;
                         connectDisconnect.Content = "Disconnect";
                         userNickName.IsEnabled = false;
                     }
@@ -56,10 +54,10 @@ namespace Client
                 else
                     ShowError("User name can`t be empty!", MessageBoxButton.OK);
             }
-            else if (isConnected)
+            else if (isConnectedToServer)
             {
                 DisconnectFromServer();
-                isConnected = false;
+                isConnectedToServer = false;
                 connectDisconnect.Content = "Connect";
                 userNickName.IsEnabled = true;
             }
@@ -177,5 +175,25 @@ namespace Client
 
         void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
             => DisconnectFromServer();
+
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            Message_LostFocus(sender, new RoutedEventArgs());
+            UserNickName_LostFocus(sender, new RoutedEventArgs());
+        }
+
+        private void Window_Activated(object sender, EventArgs e)
+        {
+            if (WindowActivatedFirstTime)
+            {
+                GetDefaultSettings();
+                WindowActivatedFirstTime = false;
+            }
+            else
+                if (message.IsFocused)
+                    Message_GotFocus(sender, new RoutedEventArgs());
+                else if (userNickName.IsFocused)
+                    UserNickName_GotFocus(sender, new RoutedEventArgs());
+        }
     }
 }
