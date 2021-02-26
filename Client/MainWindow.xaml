@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="UnderChat" Icon="Recources/chat.ico" Height="450" Width="800" Closing="Window_Closing">
+        Title="UnderChat" Icon="Recources/chat.ico" Height="450" Width="800"
+            Closing="Window_Closing" Deactivated="Window_Deactivated"  Activated="Window_Activated">
     <Grid ShowGridLines="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"></RowDefinition>
@@ -16,12 +17,15 @@
             <ColumnDefinition Width="1*"></ColumnDefinition>
             <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Button x:Name="connectDisconnect" Grid.Column="0" Grid.Row="0" Content="Connect" Margin="10 10 5 10" FontSize="20"
-                FontFamily="Times New Roman" Background="WhiteSmoke" BorderBrush="LightGray" Click="ConnectDisconnect_Click"/>
-        <TextBox x:Name="userNickName" Grid.Column="1" Grid.Row="0" FontSize="20" FontFamily="Times New Roman" Margin="5 10 10 10"
-                 MaxLength="20" VerticalContentAlignment="Center" GotFocus="UserNickName_GotFocus" LostFocus="UserNickName_LostFocus"/>
+        <Button x:Name="connectDisconnect" Grid.Column="0" Grid.Row="0" 
+            Content="Connect" Margin="10 10 5 10" FontSize="20" FontFamily="Times New Roman"
+                Background="WhiteSmoke" BorderBrush="LightGray" Click="ConnectDisconnect_Click"/>
+        <TextBox x:Name="userNickName" Grid.Column="1" Grid.Row="0" FontSize="20"
+                 FontFamily="Times New Roman" Margin="5 10 10 10" MaxLength="20"
+                    VerticalContentAlignment="Center" TextWrapping="Wrap"
+                 GotFocus="UserNickName_GotFocus" LostFocus="UserNickName_LostFocus"/>
         <ListBox x:Name="messagesField" Grid.ColumnSpan="2" Grid.Row="1" Margin="10 0 10 0" FontSize="20"
-                 FontFamily="Times New Roman" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    FontFamily="Times New Roman" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Margin" Value="5"/>
@@ -34,7 +38,9 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <TextBox x:Name="message" Grid.ColumnSpan="2" Grid.Row="3" Margin="10 10 10 10" FontSize="20" FontFamily="Times New Roman" MaxLength="100"
-                 TextWrapping="Wrap" VerticalContentAlignment="Center" GotFocus="Message_GotFocus" LostFocus="Message_LostFocus" KeyDown="Message_KeyDown"/>
+        <TextBox x:Name="message" Grid.ColumnSpan="2" Grid.Row="3" Margin="10 10 10 10"
+                    FontSize="20" FontFamily="Times New Roman" MaxLength="100"
+                    TextWrapping="Wrap" VerticalContentAlignment="Center"
+                 GotFocus="Message_GotFocus" LostFocus="Message_LostFocus" KeyDown="Message_KeyDown"/>
     </Grid>
 </Window>
