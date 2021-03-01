@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.Entity;
 
 namespace Server
 {
@@ -11,6 +6,6 @@ namespace Server
     {
         public UserContextDB() : base("DbConnection") {}
 
-        public DbSet<UserDB> users { get; set; }
+        public DbSet<UsersDateBase> users { get; set; }
     }
 }

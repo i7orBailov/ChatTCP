@@ -4,26 +4,32 @@ using System.Text;
 
 namespace Server
 {
-    public class ClientInstance
+    public class UserInstance
     {
-        protected internal int userID { get; private set; }
+        internal int userID { get; private set; }
 
         protected internal NetworkStream dataTransferStream { get; private set; }
 
-        protected internal string userNickName { get; set; }
+        protected internal string userNickName { get; private set; }
+
+        protected internal string userPassword { get; private set; }
+
+        protected internal bool toRegister { get; private set; }
 
         static int nextID = 0;
-
+        
         readonly TcpClient user;
 
-        readonly ServerFunctions server;
+        readonly ServerFunctions serverFunction;
 
-        public ClientInstance(TcpClient user, ServerFunctions server)
+        public UserInstance(TcpClient user, ServerFunctions server)
         {
-            this.user = user;
-            this.server = server;
             userID = nextID;
-            this.server.ConnectUser(this);
+            this.user = user;
+            serverFunction = server;
+            userNickName = ReceiveMessage();
+            userPassword = ReceiveMessage();
+            toRegister = bool.Parse(ReceiveMessage());
             nextID++;
         }
 
@@ -43,21 +49,21 @@ namespace Server
             return completeMessage.ToString();
         }
 
-        public void BroadcastChat()
+        public void BroadcastMessageToChat()
         {
             while (true)
             {
                 string messageToBroadcast = ReceiveMessage();
 
                 if (messageToBroadcast == string.Empty)
-                    server.DisconnectUser(userID);
+                    serverFunction.DisconnectUser(userID);
                 else
                 {
                     messageToBroadcast = string.Format("{0} : {1} : {2}",
                     DateTime.Now.ToShortTimeString(), userNickName, messageToBroadcast);
 
-                    server.NotifyServer(messageToBroadcast);
-                    server.NotifyAllUsers(messageToBroadcast, userID, includeSender: true);
+                    serverFunction.NotifyServer(messageToBroadcast);
+                    serverFunction.NotifyAllUsers(messageToBroadcast, userID, includeSender: true);
                 }
             }
         }
