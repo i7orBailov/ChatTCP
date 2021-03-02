@@ -16,8 +16,13 @@ namespace Client
         bool isConnectedToServer = false;
         bool WindowActivatedFirstTime = true;
 
-        public MainWindow() =>
+        //public string userName { get; }
+
+        public MainWindow(string userNick)
+        {
+            userNickName.Text = userNick;
             InitializeComponent();
+        }
 
         void GetDefaultSettings(bool messageField = true, bool nickName = true)
         {

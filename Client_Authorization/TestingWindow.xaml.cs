@@ -10,33 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Client_Authorization
 {
-    public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for TestingWindow.xaml
+    /// </summary>
+    public partial class TestingWindow : Window
     {
-        //bool registerUser = false;
-
-        
-
-        public MainWindow()
+        public TestingWindow()
         {
             InitializeComponent();
-        }
-
-        private void Login_Click(object sender, RoutedEventArgs e)
-        {
-            //var newForm = new Client.MainWindow();
-            //newForm.Show();
-            //Close();
-
-        }
-
-        private void Register_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

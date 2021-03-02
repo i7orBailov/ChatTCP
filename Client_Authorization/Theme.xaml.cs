@@ -15,28 +15,14 @@ using System.Windows.Shapes;
 
 namespace Client_Authorization
 {
-    public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for Theme.xaml
+    /// </summary>
+    public partial class Theme : Page
     {
-        //bool registerUser = false;
-
-        
-
-        public MainWindow()
+        public Theme()
         {
             InitializeComponent();
-        }
-
-        private void Login_Click(object sender, RoutedEventArgs e)
-        {
-            //var newForm = new Client.MainWindow();
-            //newForm.Show();
-            //Close();
-
-        }
-
-        private void Register_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
