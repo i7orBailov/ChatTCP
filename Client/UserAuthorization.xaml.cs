@@ -14,14 +14,20 @@ using System.Windows.Shapes;
 
 namespace Client
 {
-    /// <summary>
-    /// Interaction logic for UserAuthorization.xaml
-    /// </summary>
     public partial class UserAuthorization : Window
     {
+        //bool registerUser;
+
         public UserAuthorization()
         {
             InitializeComponent();
+        }
+
+        void Login()
+        {
+            //var newForm = new Client.MainWindow();
+            //newForm.Show();
+            //Close();
         }
     }
 }
