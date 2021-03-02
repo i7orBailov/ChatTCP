@@ -10,19 +10,24 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Client_Authorization
+namespace Client
 {
-    /// <summary>
-    /// Interaction logic for Theme.xaml
-    /// </summary>
-    public partial class Theme : Page
+    public partial class UserAuthorization : Window
     {
-        public Theme()
+        //bool registerUser;
+
+        public UserAuthorization()
         {
             InitializeComponent();
+        }
+
+        void Login()
+        {
+            //var newForm = new Client.MainWindow();
+            //newForm.Show();
+            //Close();
         }
     }
 }
