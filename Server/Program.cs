@@ -15,6 +15,8 @@ namespace Server
                 server = new ServerFunctions();
                 listenThread = new Thread(new ThreadStart(server.ListenConnections));
                 listenThread.Start();
+                
+                // TODO : create possibility to check list of registered/logged users
             }
             catch (Exception exception)
             {

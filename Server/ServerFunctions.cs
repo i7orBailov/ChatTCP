@@ -11,7 +11,7 @@ namespace Server
     public class ServerFunctions
     {
         static TcpListener server = new TcpListener(IPAddress.Any, 8080);
-        List<ClientInstance> users = new List<ClientInstance>();
+        List<UserInstance> connectedUsers = new List<UserInstance>(); // TODO : later use DateBase instead
 
         protected internal void ListenConnections()
         {
@@ -22,23 +22,28 @@ namespace Server
 
             while (true)
             {
-                TcpClient tcpClient = server.AcceptTcpClient();
+                var tcpClient = server.AcceptTcpClient();
 
-                ClientInstance user = new ClientInstance(tcpClient, this);
-                Thread clientThread = new Thread(new ThreadStart(user.BroadcastChat));
+                var user = new UserInstance(tcpClient, this);
+                var userAuthorization = new UserAuthorization(user, user.toRegister);
+                ConnectUser(user);
+                var clientThread = new Thread(new ThreadStart(user.BroadcastMessageToChat));
                 clientThread.Start();
             }
         }
 
-        protected internal void ConnectUser(ClientInstance userToAdd)
+        protected internal void ConnectUser(UserInstance userToConnect)
         {
-            users.Add(userToAdd);
-            userToAdd.userNickName = userToAdd.ReceiveMessage();
+            connectedUsers.Add(userToConnect);
 
             string messageAboutJoining = $"{DateTime.Now.ToShortTimeString()}" +
-                    $" : {userToAdd.userNickName} connected to the server.";
+                    $" : {userToConnect.userNickName} connected to the server.";
+
+
             
-            NotifyAllUsers(messageAboutJoining, userToAdd.userID);
+            // TODO : clause for server : user 'logged'/'registered' and then connected to the server
+
+            NotifyAllUsers(messageAboutJoining, userToConnect.userID);
             NotifyServer(messageAboutJoining, userJoined: true);
         }
         
@@ -46,17 +51,17 @@ namespace Server
         {
             byte[] writeBuffer = Encoding.Unicode.GetBytes(messageToSend);
 
-            for (int i = 0; i < users.Count; i++)
+            for (int i = 0; i < connectedUsers.Count; i++)
             {
                 if (!includeSender)
                 {
-                    if (users[i].userID != senderUserID)
+                    if (connectedUsers[i].userID != senderUserID)
                     {   
-                        users[i].dataTransferStream.Write(writeBuffer, 0, writeBuffer.Length);
+                        connectedUsers[i].dataTransferStream.Write(writeBuffer, 0, writeBuffer.Length);
                     }
                 }
                 else
-                    users[i].dataTransferStream.Write(writeBuffer, 0, writeBuffer.Length);
+                    connectedUsers[i].dataTransferStream.Write(writeBuffer, 0, writeBuffer.Length);
             }
         }
 
@@ -78,17 +83,17 @@ namespace Server
                 Console.WriteLine(message);
         }
 
-        protected internal void DisconnectUser(int userID)
+        protected internal void DisconnectUser(int userToDisconnectID)
         {
-            var userToRemove = users.FirstOrDefault(c => c.userID == userID);
-            if (userToRemove != null)
+            var userToDisconnect = connectedUsers.FirstOrDefault(c => c.userID == userToDisconnectID);
+            if (userToDisconnect != null)
             {
-                users.Remove(userToRemove);
+                connectedUsers.Remove(userToDisconnect);
 
                 string messageAboutLeaving = $"{DateTime.Now.ToShortTimeString()}" +
-                    $" : {userToRemove.userNickName} left the server.";
+                    $" : {userToDisconnect.userNickName} left the server.";
 
-                NotifyAllUsers(messageAboutLeaving, userID);
+                NotifyAllUsers(messageAboutLeaving, userToDisconnectID);
                 NotifyServer(messageAboutLeaving, userLeft: true);
             }
         }
@@ -97,8 +102,8 @@ namespace Server
         {
             server.Stop();
 
-            for (int i = 0; i < users.Count; i++)
-                users[i].CloseConnection();
+            for (int i = 0; i < connectedUsers.Count; i++)
+                connectedUsers[i].CloseConnection();
 
             Environment.Exit(0);
         }
