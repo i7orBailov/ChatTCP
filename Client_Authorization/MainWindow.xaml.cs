@@ -17,7 +17,9 @@ namespace Client_Authorization
 {
     public partial class MainWindow : Window
     {
-        bool registerUser = false;
+        //bool registerUser = false;
+
+        
 
         public MainWindow()
         {
@@ -29,7 +31,6 @@ namespace Client_Authorization
             //var newForm = new Client.MainWindow();
             //newForm.Show();
             //Close();
-
 
         }
 
