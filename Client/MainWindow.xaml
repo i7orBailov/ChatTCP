@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="UnderChat" Icon="Resources/chat.ico" Height="450" Width="800"
             Closing="Window_Closing" Deactivated="Window_Deactivated"  Activated="Window_Activated">
+    <Window.Resources>
+        <ResourceDictionary Source="MainWindowControls.xaml" />
+    </Window.Resources>
     <Grid ShowGridLines="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"></RowDefinition>
@@ -19,12 +22,12 @@
         </Grid.ColumnDefinitions>
         <Button x:Name="connectDisconnect" Grid.Column="0" Grid.Row="0" 
             Content="Connect" Margin="10 10 5 10" FontSize="20" FontFamily="Times New Roman"
-                Style="{DynamicResource ButtonWhiteSmokeStyle}" Click="ConnectDisconnect_Click"/>
+                Click="ConnectDisconnect_Click"/>
         <TextBox x:Name="userNickName" Grid.Column="1" Grid.Row="0" FontSize="20"
                  FontFamily="Times New Roman" Margin="5 10 10 10" MaxLength="20"
                     VerticalContentAlignment="Center" TextWrapping="Wrap"
-                    Style="{DynamicResource TextBoxWhiteSmokeStyle}"
-                 GotFocus="UserNickName_GotFocus" LostFocus="UserNickName_LostFocus"/>
+                 GotFocus="UserNickName_GotFocus" LostFocus="UserNickName_LostFocus"
+                    Style="{DynamicResource TextBoxNoColorChangeStyle}"/>
         <ListBox x:Name="messagesField" Grid.ColumnSpan="2" Grid.Row="1" Margin="10 0 10 0" FontSize="20"
                     FontFamily="Times New Roman" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemContainerStyle>
@@ -42,7 +45,7 @@
         <TextBox x:Name="message" Grid.ColumnSpan="2" Grid.Row="3" Margin="10 10 10 10"
                     FontSize="20" FontFamily="Times New Roman" MaxLength="100"
                  TextWrapping="Wrap" VerticalContentAlignment="Center"
-                    Style="{DynamicResource TextBoxWhiteSmokeStyle}"
+                    Style="{DynamicResource TextBoxNoColorChangeStyle}"
                  GotFocus="Message_GotFocus" LostFocus="Message_LostFocus" KeyDown="Message_KeyDown"/>
     </Grid>
 </Window>

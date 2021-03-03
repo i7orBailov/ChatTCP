@@ -18,9 +18,9 @@ namespace Client
 
         //public string userName { get; }
 
-        public MainWindow(string userNick)
+        public MainWindow()
         {
-            userNickName.Text = userNick;
+            //userNickName.Text = userNick;
             InitializeComponent();
         }
 
