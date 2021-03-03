@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
         Title="Authorization" Height="500" Width="500" ResizeMode="NoResize">
+    <Window.Resources>
+        <ResourceDictionary Source="UserAuthenticationControls.xaml" />
+    </Window.Resources>
     <Grid ShowGridLines="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -19,22 +22,26 @@
         </Grid.ColumnDefinitions>
         <ComboBox x:Name="registerLogin" Grid.ColumnSpan="2" Grid.Row="0" Margin="30 30 30 30"
                   SelectedIndex="0" FontSize="30" FontFamily="Times New Roman"
-                  VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                  BorderBrush="LightGray" Background="WhiteSmoke" Style="{DynamicResource ComboBoxWhiteSmokeStyle}">
-            <ComboBoxItem Content="Registration"/>
-            <ComboBoxItem Content="Logging"/>
+                    VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                  Style="{DynamicResource ComboBoxRedStyle}" Cursor="Hand">
+            <ComboBoxItem Content="Registration" Style="{DynamicResource ComboBoxItemRedStyle}"/>
+            <ComboBoxItem Content="Logging" Style="{DynamicResource ComboBoxItemRedStyle}"/>
         </ComboBox>
         <Image x:Name="User" Source="Resources/man.ico" RenderOptions.BitmapScalingMode="HighQuality"
                Grid.Row="1" Margin="10 10 10 10"/>
         <TextBox x:Name="nickNameField" Grid.Row="1" Grid.Column="2" Margin="0 20 20 20" MaxLength="20"
-                 FontSize="30" FontFamily="Times New Roman" VerticalContentAlignment="Center" TextWrapping="NoWrap"/>
+                 FontSize="30" FontFamily="Times New Roman" VerticalContentAlignment="Center"
+             TextWrapping="NoWrap" Style="{DynamicResource TextBoxRedStyle}"/>
         <Image x:Name="Password" Source="Resources/password-2.ico" RenderOptions.BitmapScalingMode="HighQuality"
                Grid.Row="2" Margin="10 0 10 20"/>
         <TextBox x:Name="passwordField" Grid.Row="2" Grid.Column="2" Margin="0 20 20 20" MaxLength="20"
-                 FontSize="30" FontFamily="Times New Roman" VerticalContentAlignment="Center" TextWrapping="NoWrap"/>
-        <PasswordBox x:Name="HiddenPassword" PasswordChar=" " CaretBrush="White" MaxLength="5" Grid.Row="2" Grid.Column="2" Margin="0 20 20 20"/>
+                 FontSize="30" FontFamily="Times New Roman" VerticalContentAlignment="Center"
+                 TextWrapping="NoWrap" Style="{DynamicResource TextBoxRedStyle}"/>
+        <PasswordBox x:Name="HiddenPassword" PasswordChar=" " CaretBrush="White" MaxLength="5"
+                        Grid.Row="2" Grid.Column="2" Margin="0 20 20 20"
+                     Style="{DynamicResource PasswordBoxRedStyle}"/>
         <Button x:Name="Register" Content="Register" FontSize="30" FontFamily="Times New Roman"
                     Grid.ColumnSpan="2" Grid.Row="3" Margin="30 30 30 30"
-                />
+                Style="{DynamicResource ButtonRedStyle}" Cursor="Hand"/>
     </Grid>
 </Window>
