@@ -36,6 +36,19 @@ namespace Server
             }
         }
 
+        protected internal void ConnectUser(UserInstance userToConnect)
+        {
+            connectedUsers.Add(userToConnect);
+
+            string messageAboutJoining = $"{DateTime.Now.ToShortTimeString()}" +
+                    $" : {userToConnect.userNickName} connected to the server.";
+     
+            // TODO : clause for server : user 'logged'/'registered' and then connected to the server
+
+            NotifyAllUsers(messageAboutJoining, userToConnect.userID);
+            NotifyServer(messageAboutJoining, userJoined: true);
+        }
+        
         void AnswerToClient(UserInstance userToWhomAnswer, string messageToAnswer)
         {
             try
@@ -46,21 +59,6 @@ namespace Server
             catch (Exception) { Console.WriteLine("Could not answer to client."); }
         }
 
-        protected internal void ConnectUser(UserInstance userToConnect)
-        {
-            connectedUsers.Add(userToConnect);
-
-            string messageAboutJoining = $"{DateTime.Now.ToShortTimeString()}" +
-                    $" : {userToConnect.userNickName} connected to the server.";
-
-
-            
-            // TODO : clause for server : user 'logged'/'registered' and then connected to the server
-
-            NotifyAllUsers(messageAboutJoining, userToConnect.userID);
-            NotifyServer(messageAboutJoining, userJoined: true);
-        }
-        
         protected internal void NotifyAllUsers(string messageToSend, int senderUserID, bool includeSender = false)
         {
             byte[] writeBuffer = Encoding.Unicode.GetBytes(messageToSend);
