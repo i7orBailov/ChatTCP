@@ -10,6 +10,7 @@
     <Window.Resources>
         <ResourceDictionary Source="MainWindowControls.xaml" />
     </Window.Resources>
+    
     <Grid ShowGridLines="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"></RowDefinition>
@@ -20,16 +21,19 @@
             <ColumnDefinition Width="1*"></ColumnDefinition>
             <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Button x:Name="connectDisconnect" Grid.Column="0" Grid.Row="0" 
-            Content="Connect" Margin="10 10 5 10" FontSize="20" FontFamily="Times New Roman"
-                />
+
+        <TextBlock x:Name="textBlockUsername" Grid.Column="0" Grid.Row="0" Margin="0 0 10 0"
+                       Text="Username:" FontSize="20" FontFamily="Times New Roman"
+                   TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+
         <TextBox x:Name="textBoxNickname" Grid.Column="1" Grid.Row="0" FontSize="20"
                  FontFamily="Times New Roman" Margin="5 10 10 10" MaxLength="20"
                     VerticalContentAlignment="Center" TextWrapping="Wrap"
-                 GotFocus="UserNickName_GotFocus" LostFocus="UserNickName_LostFocus"
-                    Style="{DynamicResource TextBoxNoColorChangeStyle}"/>
-        <ListBox x:Name="listBoxMessages" Grid.ColumnSpan="2" Grid.Row="1" Margin="10 0 10 0" FontSize="20"
-                    FontFamily="Times New Roman" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                 IsEnabled="False" Style="{DynamicResource TextBoxNoColorChangeStyle}"/>
+        
+        <ListBox x:Name="listBoxMessages" Grid.ColumnSpan="2" Grid.Row="1"
+                    Margin="10 0 10 0" FontSize="20" FontFamily="Times New Roman"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Margin" Value="5"/>
@@ -42,6 +46,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        
         <TextBox x:Name="textBoxMessage" Grid.ColumnSpan="2" Grid.Row="3" Margin="10 10 10 10"
                     FontSize="20" FontFamily="Times New Roman" MaxLength="100"
                  TextWrapping="Wrap" VerticalContentAlignment="Center"

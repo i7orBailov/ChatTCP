@@ -17,6 +17,7 @@ namespace Client
     public partial class UserAuthorization : Window
     {
         bool passwordIsValid;
+
         bool usernickIsValid;
 
         public UserAuthorization()
@@ -25,8 +26,19 @@ namespace Client
             ComboBoxRegisterLogin.SelectedIndex = 0;
         }
 
-        void NotifyError(string errorMessage) =>
-            MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.None);
+        void ButtonRegisterOrLogin_Click(object sender, RoutedEventArgs e)
+        {
+            textBoxPassword.Text = HiddenPassword.Password;
+            ValidatePassword();
+            ValidateUsername();
+            if (passwordIsValid && usernickIsValid)
+            {
+                if (ComboBoxRegisterLogin.SelectedIndex == 0)
+                    LoginOrRegisterUser(register: true);
+                else
+                    LoginOrRegisterUser(register: false);
+            }
+        }
 
         void ValidateUsername()
         {
@@ -54,20 +66,6 @@ namespace Client
                 passwordIsValid = true;
         }
 
-        void ButtonRegisterOrLogin_Click(object sender, RoutedEventArgs e)
-        {
-            textBoxPassword.Text = HiddenPassword.Password;
-            ValidatePassword();
-            ValidateUsername();
-            if (passwordIsValid && usernickIsValid)
-            {
-                if (ComboBoxRegisterLogin.SelectedIndex == 0)
-                    LoginOrRegisterUser(register: true);
-                else
-                    LoginOrRegisterUser(register: false);
-            }
-        }
-
         void LoginOrRegisterUser(bool register)
         {
             try
@@ -82,13 +80,16 @@ namespace Client
                 else
                 {
                     if (register)
-                        NotifyError("Seems, such a user already exists");
+                        NotifyError("Seems, such a user is already registered");
                     else
                         NotifyError("Such a user is not registered yet");
                 }
             }
             catch (Exception) { NotifyError("Could not connect to the server"); }
         }
+
+        void NotifyError(string errorMessage) =>
+            MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.None);
 
         private void RegisterLogin_SelectionChanged(object sender, SelectionChangedEventArgs e) =>
             ButtonRegisterLogin.Content = ComboBoxRegisterLogin.SelectedIndex == 0 ?

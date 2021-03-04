@@ -13,9 +13,7 @@ namespace Client
     {
         static TcpClient client;
         static NetworkStream dataTransferStream;
-        //bool isConnectedToServer = false;
         bool WindowActivatedFirstTime = true;
-
         string userNickname;
         string userPassword;
         bool userRegister;
@@ -35,82 +33,18 @@ namespace Client
                 client.Close();
         }
 
-        void GetDefaultSettings(bool messageField = true, bool nickName = true)
-        {
-            if (messageField)
-            {
-                textBoxMessage.Text = "Enter message";
-                textBoxMessage.Foreground = Brushes.Gray;
-            }
-
-            if (nickName)
-            {
-                textBoxNickname.Text = "Enter nick-name";
-                textBoxNickname.Foreground = Brushes.Gray;
-            }
-        }
-
-        MessageBoxResult ShowError(string errorMessage, MessageBoxButton messageBoxButton) =>
-            MessageBox.Show(errorMessage, "Error", messageBoxButton, MessageBoxImage.None, MessageBoxResult.None);
-
-        //void ConnectDisconnect_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (!isConnectedToServer)
-        //    {
-        //        if (!string.IsNullOrWhiteSpace(userNickName.Text) && userNickName.Foreground != Brushes.Gray)
-        //        {
-        //            ConnectToServer();
-        //            if (client.Connected)
-        //            {
-        //                isConnectedToServer = true;
-        //                connectDisconnect.Content = "Disconnect";
-        //                userNickName.IsEnabled = false;
-        //            }
-        //        }
-        //        else
-        //            ShowError("User name can`t be empty!", MessageBoxButton.OK);
-        //    }
-        //    else if (isConnectedToServer)
-        //    {
-        //        DisconnectFromServer();
-        //        isConnectedToServer = false;
-        //        connectDisconnect.Content = "Connect";
-        //        userNickName.IsEnabled = true;
-        //    }
-        //}
-
         void ConnectToServer()
         {
-            try
-            {
-                client = new TcpClient();
-                client.Connect(IPAddress.Loopback, 8080);
-                dataTransferStream = client.GetStream();
+            client = new TcpClient();
+            client.Connect(IPAddress.Loopback, 8080);
+            dataTransferStream = client.GetStream();
 
-                string NickPassRegister = $"name/{userNickname}/" +
-                                   $"password/{userPassword}/" +
-                                   $"register/{userRegister}";
+            string NickPassRegister = $"name/{userNickname}/" +
+                               $"password/{userPassword}/" +
+                               $"register/{userRegister}";
 
-                SendMessage(NickPassRegister);
-                successfullyConnectedToServer = GetKnownIfUserConnected();
-            }
-
-            catch (Exception ex)
-            {
-                //    //string errorMessage = "Couldn`t connect to the server. Anyway continue?";
-                //    //var result = ShowError(errorMessage, MessageBoxButton.YesNo);
-                //    //switch (result)
-                //    //{
-                //    //    case MessageBoxResult.No:
-                //    //    {
-                //    //        Environment.Exit(0);
-                //    //        break;
-                //    //    }
-                //    //    case MessageBoxResult.Yes:
-                //    //        break;
-                //    //}
-                throw ex;
-            }
+            SendMessage(NickPassRegister);
+            successfullyConnectedToServer = GetKnownIfUserConnected();
         }
 
         void SendMessage(string inputMessage)
@@ -138,6 +72,37 @@ namespace Client
             return bool.Parse(completeMessage.ToString());
         }
 
+        void Window_Activated(object sender, EventArgs e)
+        {
+            if (WindowActivatedFirstTime)
+            {
+                GetDefaultSettings();
+                WindowActivatedFirstTime = false;
+                BroadcastMessagesToChat();
+            }
+            else
+                if (textBoxMessage.IsFocused)
+                Message_GotFocus(sender, new RoutedEventArgs());
+        }
+
+        void GetDefaultSettings(bool messageField = true)
+        {
+            if (messageField)
+            {
+                textBoxMessage.Text = "Enter message";
+                textBoxMessage.Foreground = Brushes.Gray;
+            }
+        }
+
+        void BroadcastMessagesToChat()
+        {
+            if (successfullyConnectedToServer)
+            {
+                Thread receiveThread = new Thread(new ThreadStart(ReceiveMessage));
+                receiveThread.Start();
+            }
+        }
+
         void ReceiveMessage()
         {
             while (true)
@@ -159,29 +124,8 @@ namespace Client
             }
         }
 
-        void BroadcastMessagesToChat()
-        {
-            if (successfullyConnectedToServer)
-            {
-                Thread receiveThread = new Thread(new ThreadStart(ReceiveMessage));
-                receiveThread.Start();
-            }
-        }
-
-        void UserNickName_GotFocus(object sender, RoutedEventArgs e)
-        {
-            if(textBoxNickname.Foreground == Brushes.Gray)
-            {
-                textBoxNickname.Text = string.Empty;
-                textBoxNickname.Foreground = Brushes.Black;
-            }
-        }
-
-        void UserNickName_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(textBoxNickname.Text))
-                GetDefaultSettings(messageField:false);
-        }
+        MessageBoxResult ShowError(string errorMessage, MessageBoxButton messageBoxButton) =>
+            MessageBox.Show(errorMessage, "Error", messageBoxButton, MessageBoxImage.None, MessageBoxResult.None);
 
         void Message_GotFocus(object sender, RoutedEventArgs e)
         {
@@ -195,7 +139,7 @@ namespace Client
         void Message_LostFocus(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(textBoxMessage.Text))
-                GetDefaultSettings(nickName: false);
+                GetDefaultSettings();
         }
 
         void Message_KeyDown(object sender, KeyEventArgs e)
@@ -220,25 +164,7 @@ namespace Client
             Environment.Exit(0);
         }
 
-        void Window_Deactivated(object sender, EventArgs e)
-        {
+        void Window_Deactivated(object sender, EventArgs e) =>
             Message_LostFocus(sender, new RoutedEventArgs());
-            UserNickName_LostFocus(sender, new RoutedEventArgs());
-        }
-
-        void Window_Activated(object sender, EventArgs e)
-        {
-            if (WindowActivatedFirstTime)
-            {
-                GetDefaultSettings();
-                WindowActivatedFirstTime = false;
-                BroadcastMessagesToChat();
-            }
-            else
-                if (textBoxMessage.IsFocused)
-                    Message_GotFocus(sender, new RoutedEventArgs());
-                else if (textBoxNickname.IsFocused)
-                    UserNickName_GotFocus(sender, new RoutedEventArgs());
-        }
     }
 }
