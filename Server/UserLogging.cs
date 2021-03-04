@@ -12,22 +12,23 @@ namespace Server
 
         readonly string password;
 
-        public bool successfullyVerified { get; private set; } = false;
+        public bool successfullyLogged { get; private set; }
 
         public UserLogging(UserInstance userToLogin)
         {
             nickName = userToLogin.userNickName;
             password = userToLogin.userPassword;
+            VerifyUser();
         }
 
-        void Verification(string nickName, string password)
+        void VerifyUser()
         {
             using (var dateBase = new UserContextDB())
             {
                 foreach (var user in dateBase.users)
                 {
                     if (user.nickName == nickName && user.password == password)
-                        successfullyVerified = true;
+                        successfullyLogged = true;
                 }
             }
         }
