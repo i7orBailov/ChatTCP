@@ -11,7 +11,7 @@ namespace Client
 {
     public partial class MainWindow : Window
     {
-        static TcpClient client = new TcpClient();
+        static TcpClient client;
         static NetworkStream dataTransferStream;
         //bool isConnectedToServer = false;
         bool WindowActivatedFirstTime = true;
@@ -29,6 +29,10 @@ namespace Client
             userRegister = register;
             textBoxNickname.Text = userNick;
             ConnectToServer();
+            if (successfullyConnectedToServer)
+                authorization.Close();
+            else
+                client.Close();
         }
 
         void GetDefaultSettings(bool messageField = true, bool nickName = true)
@@ -79,14 +83,15 @@ namespace Client
         {
             try
             {
+                client = new TcpClient();
                 client.Connect(IPAddress.Loopback, 8080);
                 dataTransferStream = client.GetStream();
 
-                string forServer = $"name/{userNickname}/" +
+                string NickPassRegister = $"name/{userNickname}/" +
                                    $"password/{userPassword}/" +
                                    $"register/{userRegister}";
 
-                SendMessage(forServer);
+                SendMessage(NickPassRegister);
                 successfullyConnectedToServer = GetKnownIfUserConnected();
             }
 

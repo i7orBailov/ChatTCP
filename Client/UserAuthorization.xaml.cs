@@ -38,6 +38,13 @@ namespace Client
             {
                 chatApplication.Show();
             }
+            else
+            {
+                if (register)
+                    MessageBox.Show("User already exists");
+                else
+                    MessageBox.Show("User is not registered yet");
+            }
         }
 
         private void RegisterLogin_SelectionChanged(object sender, SelectionChangedEventArgs e)
