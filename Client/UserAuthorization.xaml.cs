@@ -16,18 +16,36 @@ namespace Client
 {
     public partial class UserAuthorization : Window
     {
-        //bool registerUser;
-
         public UserAuthorization()
         {
             InitializeComponent();
         }
-
-        void Login()
+        // '/' symbol - forbidden in usage of nick/pass
+        void ButtonRegisterOrLogin_Click(object sender, RoutedEventArgs e)
         {
-            //var newForm = new Client.MainWindow();
-            //newForm.Show();
-            //Close();
+            if (ButtonRegisterLogin.SelectedIndex == 0)
+                LoginOrRegisterUser(register: true);
+            else
+                LoginOrRegisterUser(register: false);
         }
+
+        void LoginOrRegisterUser(bool register)
+        {
+            string name = textBoxNickname.Text;
+            string password = textBoxPassword.Text;
+            var chatApplication = new MainWindow(this, name, password, register);
+            if (chatApplication.successfullyConnectedToServer)
+            {
+                chatApplication.Show();
+            }
+        }
+
+        private void RegisterLogin_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // TODO : check error with compilation
+            //Register.Content = registerLogin.SelectedIndex == 0 ? "Register" : "Login";
+        }
+
+
     }
 }

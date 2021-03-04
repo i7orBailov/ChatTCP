@@ -8,19 +8,19 @@ namespace Server
 {
     class UserAuthorization
     {
-        public bool successfullyVerified { get; private set; } = false;
+        public bool successfullyVerified { get; private set; }
 
         public UserAuthorization(UserInstance userToAuthorize, bool register)
         {
             if (register)
             {
                 var userToRegister = new UserRegistration(userToAuthorize);
-                register = userToRegister.userAlreadyExists ? false : true;
+                successfullyVerified = userToRegister.successfullyRegistered ? true : false;
             }
             else
             {
                 var userToLogin = new UserLogging(userToAuthorize);
-                register = userToLogin.successfullyVerified ? false : true;
+                successfullyVerified = userToLogin.successfullyLogged ? true : false;
             }
         }
     }

@@ -12,14 +12,14 @@ namespace Server
 
         readonly string password;
 
-        public bool userAlreadyExists { get; private set; } = false;
+        public bool successfullyRegistered { get; private set; } = true;
 
         public UserRegistration(UserInstance userToRegister)
         {
             nickName = userToRegister.userNickName;
             password = userToRegister.userPassword;
             CheckIfUserAlreadyExists();
-            if (!userAlreadyExists)
+            if (successfullyRegistered)
                 SaveUserInDateBase();
         }
 
@@ -30,7 +30,7 @@ namespace Server
                 foreach (var user in dateBase.users)
                 {
                     if (user.nickName == nickName && user.password == password)
-                        userAlreadyExists = true;
+                        successfullyRegistered = false;
                 }
             }
         }

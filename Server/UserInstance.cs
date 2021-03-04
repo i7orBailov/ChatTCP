@@ -27,10 +27,18 @@ namespace Server
             userID = nextID;
             this.user = user;
             serverFunction = server;
-            userNickName = ReceiveMessage();
-            userPassword = ReceiveMessage();
-            toRegister = bool.Parse(ReceiveMessage());
+            SetNickPassRegister();
             nextID++;
+        }
+
+        void SetNickPassRegister()
+        {
+            string clientAnswer = ReceiveMessage();
+
+            var splittedAnswer = clientAnswer.Split('/');
+            userNickName = splittedAnswer[1];
+            userPassword = splittedAnswer[3];
+            toRegister = bool.Parse(splittedAnswer[5]);
         }
 
         protected internal string ReceiveMessage()

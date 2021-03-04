@@ -26,10 +26,24 @@ namespace Server
 
                 var user = new UserInstance(tcpClient, this);
                 var userAuthorization = new UserAuthorization(user, user.toRegister);
-                ConnectUser(user);
-                var clientThread = new Thread(new ThreadStart(user.BroadcastMessageToChat));
-                clientThread.Start();
+                if (userAuthorization.successfullyVerified)
+                {
+                    ConnectUser(user);
+                    var clientThread = new Thread(new ThreadStart(user.BroadcastMessageToChat));
+                    clientThread.Start();
+                }
+                AnswerToClient(user, userAuthorization.successfullyVerified.ToString());
             }
+        }
+
+        void AnswerToClient(UserInstance userToWhomAnswer, string messageToAnswer)
+        {
+            try
+            {
+                byte[] writeBuffer = Encoding.Unicode.GetBytes(messageToAnswer);
+                userToWhomAnswer.dataTransferStream.Write(writeBuffer, 0, writeBuffer.Length);
+            }
+            catch (Exception) { Console.WriteLine("Could not answer to client."); }
         }
 
         protected internal void ConnectUser(UserInstance userToConnect)
