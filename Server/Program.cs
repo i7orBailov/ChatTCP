@@ -7,6 +7,7 @@ namespace Server
     {
         static ServerFunctions server;
         static Thread listenThread;
+        static Thread showStatusThread;
 
         static void Main(string[] args)
         {
@@ -15,9 +16,8 @@ namespace Server
                 server = new ServerFunctions();
                 listenThread = new Thread(new ThreadStart(server.ListenConnections));
                 listenThread.Start();
-                //server.ListenConnections();
-                
-                // TODO : create possibility to check list of registered/logged users
+                showStatusThread = new Thread(new ThreadStart(server.ShowInfo));
+                showStatusThread.Start();
             }
             catch (Exception exception)
             {

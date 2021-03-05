@@ -8,10 +8,7 @@
 
         public string password { get; private set; }
 
-        public UsersDateBase()
-        {
-
-        }
+        public UsersDateBase() { }
 
         public UsersDateBase(string nickName, string password)
         {

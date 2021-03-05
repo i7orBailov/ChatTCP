@@ -42,13 +42,13 @@ namespace Server
 
             string messageAboutJoining = $"{DateTime.Now.ToShortTimeString()}" +
                     $" : {userToConnect.userNickName} connected to the server.";
-     
+
             // TODO : clause for server : user 'logged'/'registered' and then connected to the server
 
             NotifyAllUsers(messageAboutJoining, userToConnect.userID);
-            NotifyServer(messageAboutJoining, userJoined: true);
+            NotifyServer(messageAboutJoining, ConsoleColor.Green);
         }
-        
+
         void AnswerToClient(UserInstance userToWhomAnswer, string messageToAnswer)
         {
             try
@@ -68,7 +68,7 @@ namespace Server
                 if (!includeSender)
                 {
                     if (connectedUsers[i].userID != senderUserID)
-                    {   
+                    {
                         connectedUsers[i].dataTransferStream.Write(writeBuffer, 0, writeBuffer.Length);
                     }
                 }
@@ -77,22 +77,11 @@ namespace Server
             }
         }
 
-        protected internal void NotifyServer(string message, bool userJoined = false, bool userLeft = false)
+        protected internal void NotifyServer(string message, ConsoleColor consoleColor = ConsoleColor.Blue)
         {
-            if (userJoined)
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine(message);
-                Console.ResetColor();
-            }
-            else if (userLeft)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(message);
-                Console.ResetColor();
-            }
-            else
-                Console.WriteLine(message);
+            Console.ForegroundColor = consoleColor;
+            Console.WriteLine(message);
+            Console.ResetColor();
         }
 
         protected internal void DisconnectUser(int userToDisconnectID)
@@ -106,7 +95,7 @@ namespace Server
                     $" : {userToDisconnect.userNickName} left the server.";
 
                 NotifyAllUsers(messageAboutLeaving, userToDisconnectID);
-                NotifyServer(messageAboutLeaving, userLeft: true);
+                NotifyServer(messageAboutLeaving, ConsoleColor.Red);
             }
         }
 
@@ -119,5 +108,83 @@ namespace Server
 
             Environment.Exit(0);
         }
+
+        protected internal void ShowInfo()
+        {
+            while (true)
+            {
+                var requestCommands = new string[]
+                { "--help", "--online", "--kick" };
+
+                string requestedCommand = Console.ReadLine();
+                if (requestedCommand == requestCommands[0])
+                    ShowHelpInfo(requestCommands);
+                else if (requestedCommand == requestCommands[1])
+                    ShowOnlineStatus();
+                else if (requestedCommand == requestCommands[2])
+                    KickUser();
+                else
+                    ShowError();
+            }
+        }
+
+        void ShowHelpInfo(params string[] availableCommands)
+        {
+            NotifyServer("commands available:", ConsoleColor.Gray);
+            foreach (var command in availableCommands)
+            {
+                NotifyServer($"\t{command}", ConsoleColor.Gray);
+            }
+        }
+
+        void ShowOnlineStatus()
+        {
+            if (connectedUsers.Count == 0)
+                NotifyServer("No users online", ConsoleColor.Gray);
+            else
+            {
+                NotifyServer($"Users online: {connectedUsers.Count}", ConsoleColor.Gray);
+                foreach (var user in connectedUsers)
+                {
+                    NotifyServer($"\t[ID] {user.userID} : {user.userNickName}", ConsoleColor.Gray);
+                }
+            }
+        }
+
+        void KickUser()
+        {
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("ID of user to kick: ");
+            bool validID = int.TryParse(Console.ReadLine(), out int userToKickID);
+            if (validID)
+            {
+                var userToKick = connectedUsers.FirstOrDefault(c => c.userID == userToKickID);
+                if (userToKick != null)
+                {
+                    string messageAboutKicking = $"{DateTime.Now.ToShortTimeString()}" +
+                        $" : {userToKick.userNickName} was kicked from the server.";
+
+                    NotifyServer(messageAboutKicking, ConsoleColor.Red);
+                    NotifyAllUsers(messageAboutKicking, userToKickID, includeSender: true);
+
+                    connectedUsers.Remove(userToKick);
+                }
+                else
+                    NotifyServer("No such a user online", ConsoleColor.DarkRed);
+            }
+            else
+                NotifyServer("Only digit allowed", ConsoleColor.DarkRed);
+            Console.ResetColor();
+
+        }
+
+        public bool UserConnectedToServer(int ID)
+        {
+            var userToCheck = connectedUsers.FirstOrDefault(c => c.userID == ID);
+            return userToCheck == null ? false : true;
+        }
+
+        void ShowError() =>
+            NotifyServer("Unknown command. --help for more details", ConsoleColor.DarkRed);
     }
 }

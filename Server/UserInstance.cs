@@ -70,8 +70,11 @@ namespace Server
                     messageToBroadcast = string.Format("{0} : {1} : {2}",
                     DateTime.Now.ToShortTimeString(), userNickName, messageToBroadcast);
 
-                    serverFunction.NotifyServer(messageToBroadcast);
-                    serverFunction.NotifyAllUsers(messageToBroadcast, userID, includeSender: true);
+                    if (serverFunction.UserConnectedToServer(userID))
+                    {
+                        serverFunction.NotifyServer(messageToBroadcast);
+                        serverFunction.NotifyAllUsers(messageToBroadcast, userID, includeSender: true);
+                    }
                 }
             }
         }
