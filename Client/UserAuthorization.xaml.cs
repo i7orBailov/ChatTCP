@@ -19,7 +19,8 @@ namespace Client
 
         void ButtonRegisterOrLogin_Click(object sender, RoutedEventArgs e)
         {
-            textBoxPassword.Text = HiddenPassword.Password;
+            if (textBoxPassword.Text.Count() < HiddenPassword.Password.Count())
+                textBoxPassword.Text = HiddenPassword.Password;
             ValidatePassword();
             ValidateUsername();
             if (passwordIsValid && usernickIsValid)
@@ -51,14 +52,14 @@ namespace Client
                 NotifyError("Password should not contain empty spaces");
             else if (textBoxPassword.Text.Any(x => x == '/'))
                 NotifyError("Password can not contain '/' symbol");
-            else if (textBoxPassword.Text.Any(x => !char.IsLetter(x)))
+            else if (textBoxPassword.Text.Where(x => char.IsLetter(x)).Count() == 0)
                 NotifyError("Password should contain at least one letter");
             else
                 passwordIsValid = true;
         }
 
         void LoginOrRegisterUser(bool register)
-        {
+        {   
             try
             {
                 string name = textBoxNickname.Text;

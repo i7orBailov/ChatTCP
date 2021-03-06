@@ -35,16 +35,18 @@ namespace Client
 
         void ConnectToServer()
         {
-            client = new TcpClient();
-            client.Connect(IPAddress.Loopback, 8080);
-            dataTransferStream = client.GetStream();
+            using (client = new TcpClient())
+            {
+                client.Connect(IPAddress.Loopback, 8080);
+                dataTransferStream = client.GetStream();
 
-            string NickPassRegister = $"name/{userNickname}/" +
-                               $"password/{userPassword}/" +
-                               $"register/{userRegister}";
+                string NickPassRegister = $"name/{userNickname}/" +
+                                   $"password/{userPassword}/" +
+                                   $"register/{userRegister}";
 
-            SendMessage(NickPassRegister);
-            successfullyConnectedToServer = GetServerAnswer();
+                SendMessage(NickPassRegister);
+                successfullyConnectedToServer = GetServerAnswer();
+            }
         }
 
         void SendMessage(string inputMessage)
