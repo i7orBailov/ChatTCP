@@ -35,16 +35,18 @@ namespace Client
 
         void ConnectToServer()
         {
-            client = new TcpClient();
-            client.Connect(IPAddress.Loopback, 8080);
-            dataTransferStream = client.GetStream();
+            using (client = new TcpClient())
+            {
+                client.Connect(IPAddress.Loopback, 8080);
+                dataTransferStream = client.GetStream();
 
-            string NickPassRegister = $"name/{userNickname}/" +
-                               $"password/{userPassword}/" +
-                               $"register/{userRegister}";
+                string NickPassRegister = $"name/{userNickname}/" +
+                                   $"password/{userPassword}/" +
+                                   $"register/{userRegister}";
 
-            SendMessage(NickPassRegister);
-            successfullyConnectedToServer = GetKnownIfUserConnected();
+                SendMessage(NickPassRegister);
+                successfullyConnectedToServer = GetServerAnswer();
+            }
         }
 
         void SendMessage(string inputMessage)
@@ -58,7 +60,7 @@ namespace Client
             catch (Exception) { ShowError("Connect to the server firstly", MessageBoxButton.OK); }
         }
 
-        bool GetKnownIfUserConnected()
+        bool GetServerAnswer()
         {
             byte[] readBuffer = new byte[64];
             StringBuilder completeMessage = new StringBuilder();

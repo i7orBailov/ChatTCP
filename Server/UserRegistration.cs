@@ -23,7 +23,7 @@
             {
                 foreach (var user in dateBase.users)
                 {
-                    if (user.nickName == nickName && user.password == password)
+                    if (user.nickName == nickName)
                         successfullyRegistered = false;
                 }
             }

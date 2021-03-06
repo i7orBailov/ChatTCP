@@ -26,13 +26,19 @@ namespace Server
 
                 var user = new UserInstance(tcpClient, this);
                 var userAuthorization = new UserAuthorization(user, user.toRegister);
-                if (userAuthorization.successfullyVerified)
+                if (UserConnectedToServer(user.userNickName))
+                    AnswerToClient(user, false.ToString());
+                else
                 {
-                    ConnectUser(user);
-                    var clientThread = new Thread(new ThreadStart(user.BroadcastMessageToChat));
-                    clientThread.Start();
+                    if (userAuthorization.successfullyVerified)
+                    {
+                        ConnectUser(user);
+                        var clientThread = new Thread(new ThreadStart(user.BroadcastMessageToChat));
+                        clientThread.Start();
+                    }
+                    AnswerToClient(user, userAuthorization.successfullyVerified.ToString());
                 }
-                AnswerToClient(user, userAuthorization.successfullyVerified.ToString());
+                
             }
         }
 
@@ -181,6 +187,12 @@ namespace Server
         public bool UserConnectedToServer(int ID)
         {
             var userToCheck = connectedUsers.FirstOrDefault(c => c.userID == ID);
+            return userToCheck == null ? false : true;
+        }
+
+        public bool UserConnectedToServer(string Nickname)
+        {
+            var userToCheck = connectedUsers.FirstOrDefault(c => c.userNickName == Nickname);
             return userToCheck == null ? false : true;
         }
 
