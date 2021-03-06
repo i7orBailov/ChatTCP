@@ -44,7 +44,7 @@ namespace Client
                                $"register/{userRegister}";
 
             SendMessage(NickPassRegister);
-            successfullyConnectedToServer = GetKnownIfUserConnected();
+            successfullyConnectedToServer = GetServerAnswer();
         }
 
         void SendMessage(string inputMessage)
@@ -58,7 +58,7 @@ namespace Client
             catch (Exception) { ShowError("Connect to the server firstly", MessageBoxButton.OK); }
         }
 
-        bool GetKnownIfUserConnected()
+        bool GetServerAnswer()
         {
             byte[] readBuffer = new byte[64];
             StringBuilder completeMessage = new StringBuilder();

@@ -71,9 +71,9 @@ namespace Client
                 else
                 {
                     if (register)
-                        NotifyError("Seems, such a user is already registered");
+                        NotifyError("Seems, such a user is already registered or being online");
                     else
-                        NotifyError("Such a user is not registered yet");
+                        NotifyError("Wrong password or user is not registered yet or being online");
                 }
             }
             catch (Exception) { NotifyError("Could not connect to the server"); }
